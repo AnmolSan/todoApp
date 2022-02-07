@@ -18,8 +18,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(Options => Options.UseSqlSer
     builder.Configuration.GetConnectionString("Default")));
 
 //Added identity server for user login 
-builder.Services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.RequireConfirmedAccount = true*/)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.RequireConfirmedAccount = true*/)
+//    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 //implementation for unit of work interface
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -39,7 +39,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 //was add for user authentication
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllerRoute(

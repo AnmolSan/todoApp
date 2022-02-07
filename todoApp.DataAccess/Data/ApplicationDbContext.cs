@@ -6,7 +6,7 @@ using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 
 namespace todoApp.DataAccess
 {
-    public class ApplicationDbContext:IdentityDbContext
+    public class ApplicationDbContext:DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext>options):base(options)
         {
