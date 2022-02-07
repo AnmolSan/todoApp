@@ -1,14 +1,28 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using todo.Data;
+using todoApp.DataAccess;
+using todoApp.DataAccess.Repository;
+using todoApp.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//Added razor page runtime compilation for view to hotload
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+//Application db context for communication between database and application
 builder.Services.AddDbContext<ApplicationDbContext>(Options => Options.UseSqlServer(
-    builder.Configuration.GetConnectionString("Default")
-));
+    builder.Configuration.GetConnectionString("Default")));
+
+//Added identity server for user login 
+builder.Services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.RequireConfirmedAccount = true*/)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+//implementation for unit of work interface
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
@@ -24,11 +38,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+//was add for user authentication
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=User}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
